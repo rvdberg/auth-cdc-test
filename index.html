@@ -1,115 +1,201 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SAP CDC Proxy Login</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- SAP CDC SDK -->
-    <script
-        src="https://cdns.eu1.gigya.com/js/gigya.js?apiKey=4_bA6gSzW_ffYlmdLnvdY36g"
-        type="text/javascript">
-    </script>
+<title>Inloggen</title>
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f5f5f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+<script src="https://cdns.eu1.gigya.com/js/gigya.js?apiKey=4_bA6gSzW_ffYlmdLnvdY36g"></script>
 
-        .login-box {
-            background: white;
-            padding: 30px;
-            border-radius: 6px;
-            box-shadow: 0 2px 8px rgba(0,0,0,.15);
-            width: 320px;
-        }
+<style>
+*{
+    box-sizing:border-box;
+}
 
-        h2 {
-            margin-top: 0;
-            text-align: center;
-        }
+body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f5f7f5;
+    color:#222;
+}
 
-        input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 12px;
-            box-sizing: border-box;
-        }
+.wrapper{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:40px 20px;
+}
 
-        button {
-            width: 100%;
-            padding: 10px;
-            cursor: pointer;
-        }
+.login-card{
+    width:420px;
+    background:#fff;
+    border-radius:12px;
+    box-shadow:0 4px 18px rgba(0,0,0,.08);
+    padding:40px;
+}
 
-        #message {
-            margin-top: 15px;
-            color: red;
-            text-align: center;
-        }
-    </style>
+.logo{
+    text-align:center;
+    margin-bottom:32px;
+}
+
+.logo img{
+    height:42px;
+}
+
+h1{
+    font-size:30px;
+    font-weight:400;
+    margin:0 0 30px;
+}
+
+label{
+    display:block;
+    font-size:14px;
+    margin-bottom:8px;
+    font-weight:600;
+}
+
+input{
+    width:100%;
+    padding:14px 16px;
+    font-size:16px;
+    border:1px solid #C8D0C8;
+    border-radius:6px;
+    margin-bottom:20px;
+    transition:.2s;
+}
+
+input:focus{
+    outline:none;
+    border-color:#00A651;
+    box-shadow:0 0 0 3px rgba(0,166,81,.15);
+}
+
+button{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:6px;
+    background:#00A651;
+    color:white;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.2s;
+}
+
+button:hover{
+    background:#008d46;
+}
+
+.links{
+    display:flex;
+    justify-content:space-between;
+    margin-top:24px;
+    font-size:14px;
+}
+
+.links a{
+    color:#00753B;
+    text-decoration:none;
+}
+
+.links a:hover{
+    text-decoration:underline;
+}
+
+#message{
+    margin-top:20px;
+    text-align:center;
+    font-size:14px;
+}
+
+.success{
+    color:#00753B;
+}
+
+.error{
+    color:#C62828;
+}
+</style>
+
 </head>
 <body>
 
-<div class="login-box">
-    <h2>Login</h2>
+<div class="wrapper">
 
-    <input
-        type="email"
-        id="email"
-        placeholder="Email">
+    <div class="login-card">
 
-    <input
-        type="password"
-        id="password"
-        placeholder="Password">
+        <div class="logo">
+            <!-- Replace with your own logo -->
+            <img src="logo.svg" alt="Logo">
+        </div>
 
-    <button onclick="login()">Login</button>
+        <h1>Inloggen</h1>
 
-    <div id="message"></div>
+        <label for="email">E-mailadres</label>
+        <input id="email" type="email">
+
+        <label for="password">Wachtwoord</label>
+        <input id="password" type="password">
+
+        <button onclick="login()">
+            Inloggen
+        </button>
+
+        <div id="message"></div>
+
+        <div class="links">
+            <a href="#">Nog geen account?</a>
+            <a href="#">Wachtwoord vergeten</a>
+        </div>
+
+    </div>
+
 </div>
 
 <script>
-function login() {
 
-    document.getElementById("message").innerHTML = "";
+function login(){
+
+    const msg=document.getElementById("message");
+    msg.className="";
+    msg.innerHTML="";
 
     gigya.accounts.login({
-        loginID: document.getElementById("email").value,
-        password: document.getElementById("password").value,
 
-        callback: function(response) {
+        loginID:document.getElementById("email").value,
 
-            if (response.errorCode === 0) {
+        password:document.getElementById("password").value,
 
-                console.log("Logged in", response);
+        callback:function(response){
 
-                document.getElementById("message").style.color = "green";
-                document.getElementById("message").innerHTML = "Login successful";
+            if(response.errorCode===0){
 
-                // JWT / session information
-                console.log("UID:", response.UID);
-                console.log("Session:", response.sessionInfo);
+                msg.className="success";
+                msg.innerHTML="Succesvol ingelogd.";
 
-                // Redirect if desired
-                // window.location.href = "/";
+                console.log(response);
 
-            } else {
+                // Example:
+                // fetch('/proxy-login', { ... });
 
-                console.error(response);
+            }else{
 
-                document.getElementById("message").style.color = "red";
-                document.getElementById("message").innerHTML =
-                    response.errorMessage;
+                msg.className="error";
+                msg.innerHTML=response.errorMessage;
+
             }
+
         }
+
     });
+
 }
+
 </script>
 
 </body>
